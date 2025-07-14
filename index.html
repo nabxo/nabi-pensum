@@ -1,303 +1,216 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pensum Interactivo Completo</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #fff9f9;
-    margin: 0;
-    padding: 1rem;
-    overflow-x: hidden;
-  }
-  h1 {
-    text-align: center;
-    color: #7b1fa2;
-    margin-bottom: 1rem;
-    font-family: Georgia, serif;
-  }
-
-  #pensum {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 1rem;
-  }
-
-  .semestre {
-    min-width: 240px;
-    background: #f7e6f7;
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 0 8px #c48ccc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .semestre h2 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: #9c27b0;
-    font-size: 1.2rem;
-    text-align: center;
-  }
-
-  .materia {
-    width: 200px;
-    background: #fff;
-    border-radius: 8px;
-    border: 2px solid #ce93d8;
-    margin-bottom: 0.7rem;
-    padding: 0.6rem 0.8rem;
-    cursor: pointer;
-    user-select: none;
-    text-align: center;
-    transition: background-color 0.3s, border-color 0.3s;
-    font-weight: 600;
-    color: #4a148c;
-  }
-  .materia:hover:not(.bloqueada) {
-    background-color: #e1bee7;
-  }
-  .materia.activa {
-    background-color: #9c27b0;
-    color: white;
-    border-color: #6a0080;
-  }
-  .materia.bloqueada {
-    background-color: #ddd;
-    color: #999;
-    border-color: #bbb;
-    cursor: not-allowed;
-  }
-  .materia.bloqueada:hover {
-    background-color: #ddd;
-  }
-
-  #pensum::-webkit-scrollbar {
-    height: 10px;
-  }
-  #pensum::-webkit-scrollbar-thumb {
-    background-color: #9c27b0;
-    border-radius: 10px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pensum Interactivo Completo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff9f9;
+      margin: 0;
+      padding: 1rem;
+    }
+    h1 {
+      text-align: center;
+      color: #7b1fa2;
+      font-family: Georgia, serif;
+    }
+    #pensum {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+    }
+    .semestre {
+      min-width: 260px;
+      background: #f7e6f7;
+      border-radius: 10px;
+      padding: 1rem;
+      box-shadow: 0 0 8px #c48ccc;
+    }
+    .semestre h2 {
+      text-align: center;
+      color: #9c27b0;
+      font-size: 1.2rem;
+    }
+    .materia {
+      background: #fff;
+      border: 2px solid #ce93d8;
+      border-radius: 8px;
+      padding: 0.6rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s, border-color 0.3s;
+      font-weight: 600;
+      color: #4a148c;
+      text-align: center;
+    }
+    .materia:hover:not(.bloqueada) {
+      background-color: #e1bee7;
+    }
+    .materia.activa {
+      background-color: #9c27b0;
+      color: white;
+      border-color: #6a0080;
+    }
+    .materia.bloqueada {
+      background-color: #ddd;
+      color: #999;
+      border-color: #bbb;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-
 <h1>Pensum Interactivo Completo</h1>
-
 <div id="pensum"></div>
 
 <script>
-  // Aquí todo el pensum con materias y prerrequisitos
-  const pensum = [
-    {
-      semestre: "1er Semestre",
-      materias: [
-        {codigo: "BIO-0140", nombre: "Biología Básica", prereq: []},
-        {codigo: "DOP-1000", nombre: "Orientación Institucional", prereq: []},
-        {codigo: "HIS-0110", nombre: "Fundamentos de Historia Social Dominicana", prereq: []},
-        {codigo: "INF-2060", nombre: "Computación Esencial", prereq: []},
-        {codigo: "INF-2070", nombre: "Laboratorio de Computación Esencial", prereq: ["INF-2060"]},
-        {codigo: "LET-0110", nombre: "Lengua Española Básica I", prereq: []},
-        {codigo: "SOC-0100", nombre: "Introducción a las Ciencias Sociales", prereq: []},
-      ]
-    },
-    {
-      semestre: "2do Semestre",
-      materias: [
-        {codigo: "EFS-0120", nombre: "Educación Física", prereq: []},
-        {codigo: "IDI-0280", nombre: "Inglés Elemental", prereq: []},
-        {codigo: "INF-5100", nombre: "Introducción a la Programación", prereq: ["INF-2060"]},
-        {codigo: "INF-5110", nombre: "Laboratorio de Introducción a la Programación", prereq: ["INF-5100"]},
-        {codigo: "LET-0120", nombre: "Lengua Española Básica II", prereq: ["LET-0110"]},
-        {codigo: "MAT-0140", nombre: "Matemática Básica", prereq: []},
-      ]
-    },
-    {
-      semestre: "3er Semestre",
-      materias: [
-        {codigo: "FIL-0110", nombre: "Introducción a la Filosofía", prereq: []},
-        {codigo: "FIS-0140", nombre: "Física Básica", prereq: []},
-        {codigo: "IDI-0130", nombre: "Inglés Técnico", prereq: ["IDI-0280"]},
-        {codigo: "INF-5120", nombre: "Lenguaje de Programación I", prereq: ["INF-5100"]},
-        {codigo: "INF-5130", nombre: "Laboratorio de Lenguaje de Programación I", prereq: ["INF-5120"]},
-        {codigo: "MAT-2330", nombre: "Análisis Lineal y Matricial", prereq: ["MAT-0140"]},
-        {codigo: "QUI-0140", nombre: "Química Básica", prereq: []},
-      ]
-    },
-    {
-      semestre: "4to Semestre",
-      materias: [
-        {codigo: "FIS-1150", nombre: "Física para Informática", prereq: ["FIS-0140"]},
-        {codigo: "FIS-1160", nombre: "Laboratorio de Física para Informática", prereq: ["FIS-1150"]},
-        {codigo: "INF-5140", nombre: "Lenguaje de Programación II", prereq: ["INF-5120"]},
-        {codigo: "INF-5150", nombre: "Laboratorio de Lenguaje de Programación II", prereq: ["INF-5140"]},
-        {codigo: "INF-5260", nombre: "Estructura de Datos", prereq: ["INF-5120"]},
-        {codigo: "MAT-3560", nombre: "Cálculo I", prereq: ["MAT-2330"]},
-      ]
-    },
-    {
-      semestre: "5to Semestre",
-      materias: [
-        {codigo: "EST-2110", nombre: "Estadística Básica", prereq: ["MAT-0140"]},
-        {codigo: "INF-2080", nombre: "Organización y Arquitectura del Computador", prereq: ["INF-2060"]},
-        {codigo: "INF-5160", nombre: "Lenguaje de Programación III", prereq: ["INF-5140"]},
-        {codigo: "INF-5170", nombre: "Laboratorio de Lenguaje de Programación III", prereq: ["INF-5160"]},
-        {codigo: "MAT-3570", nombre: "Cálculo II", prereq: ["MAT-3560"]},
-      ]
-    },
-    {
-      semestre: "6to Semestre",
-      materias: [
-        {codigo: "CON-1190", nombre: "Contabilidad General I", prereq: ["MAT-0140"]},
-        {codigo: "INF-3220", nombre: "Algoritmos Computacionales", prereq: ["INF-5120", "MAT-3570"]},
-        {codigo: "INF-3240", nombre: "Sistemas Operativos", prereq: ["INF-2080"]},
-        {codigo: "INF-4200", nombre: "Base de Datos I", prereq: ["INF-5140"]},
-      ]
-    },
-    {
-      semestre: "7mo Semestre",
-      materias: [
-        {codigo: "BIO-2400", nombre: "Bioética", prereq: ["FIL-0110","BIO-0140","QUI-0140"]},
-        {codigo: "INF-3290", nombre: "Análisis y Diseño de Sistemas", prereq: ["INF-4200"]},
-        {codigo: "INF-5200", nombre: "Base de Datos II", prereq: ["INF-4200"]},
-        {codigo: "MAT-1430", nombre: "Matemática Financiera", prereq: ["MAT-0140"]},
-        {codigo: "MAT-3920", nombre: "Matemática Discreta para Computación", prereq: ["MAT-0140"]},
-      ]
-    },
-    {
-      semestre: "8vo Semestre",
-      materias: [
-        {codigo: "INF-4250", nombre: "Teleproceso", prereq: ["INF-3240"]},
-        {codigo: "INF-4260", nombre: "Redes de Procesamiento de Datos", prereq: ["INF-3240", "INF-3220"]},
-        {codigo: "INF-5220", nombre: "Ingeniería de Software I", prereq: ["INF-3240", "INF-5200"]},
-        {codigo: "MAT-3940", nombre: "Investigación de Operaciones", prereq: ["MAT-3570"]},
-      ]
-    },
-    {
-      semestre: "9no Semestre",
-      materias: [
-        {codigo: "INF-5230", nombre: "Auditoría de Sistemas Informáticos", prereq: ["INF-3240", "INF-3290", "INF-4260"]},
-        {codigo: "INF-5240", nombre: "Administración de Centros de Cómputos", prereq: ["INF-4260", "INF-3240"]},
-        {codigo: "INF-5250", nombre: "Ingeniería de Software II", prereq: ["INF-5220"]},
-      ]
-    },
-    {
-      semestre: "Optativas"
- materias: [
-        {codigo: "ADM-1120", nombre: "Principios De Administración", prereq: []},
-        {codigo: "ECN-1100", nombre: "Nociones De Economía", prereq: []},
-        {codigo: "FIL-1240", nombre: "Metodología De La Investigación Científica", prereq: ["FIL-0110"]},
-        {codigo: "INF-5180", nombre: "Lenguaje de Programación IV", prereq: ["INF-5150"]},
-        {codigo: "INF-5190", nombre: "Laboratorio de Lenguaje de Programación IV", prereq: ["INF-5180"]},
-        {codigo: "INF-5290", nombre: "Inteligencia Artificial", prereq: ["INF-3220", "INF-5140"]},
-        {codigo: "INF-6100", nombre:  "Lenguaje Ensamblador", prereq: ["INF-5140"]},
-        {codigo: "MAT-3600", nombre: "Ecuaciones Diferenciales", prereq: []}, 
-        {codigo: "MAT-4940", nombre: "Métodos Numéricos", prereq: ["INF-5120", "MAT-3570"]},
-        {codigo: "ADM-3350", nombre: "Sistemas y Procedimientos O&M", prereq: ["ADM-1120"]},
-        {codigo: "FIS-1110", nombre: "Física General I-A", prereq: ["FIS-0140"]},
-        {codigo: "FIS-2210", nombre: "Laboratorio de Física General I", prereq: ["FIS-1110"]},
-        {codigo: "INF-4110", nombre: "Lenguaje C", prereq: ["INF-3240"]},
-        {codigo: "INF-4220", nombre: "Teoría de los Compiladores", prereq: ["INF-3240"]},
-        {codigo: "INF-4230", nombre: "Sistemas de Información", prereq: []},
-        {codigo: "INF-5270", nombre: "Telecomunicaciones", prereq: ["INF-4250"]},
-        {codigo: "INF-5280", nombre: "Comercio Electrónico", prereq: ["INF-4250"]},
-        {codigo: "MAT-3930", nombre: "Teoría de las Probabilidades", prereq: ["EST-2110", "MAT-3570"]},
-      ]
-    }
-  ];
+const pensum = [
+  { semestre: "1ro", materias: [
+    {codigo:"BIO-0140",nombre:"Biología Básica",prereq:[]},
+    {codigo:"DOP-1000",nombre:"Orientación Institucional",prereq:[]},
+    {codigo:"HIS-0110",nombre:"Historia Social Dominicana",prereq:[]},
+    {codigo:"INF-2060",nombre:"Computación Esencial",prereq:[]},
+    {codigo:"INF-2070",nombre:"Lab Computación Esencial",prereq:["INF-2060"]},
+    {codigo:"LET-0110",nombre:"Lengua Española I",prereq:[]},
+    {codigo:"SOC-0100",nombre:"Ciencias Sociales",prereq:[]}
+  ]},
+  { semestre: "2do", materias: [
+    {codigo:"EFS-0120",nombre:"Educación Física",prereq:[]},
+    {codigo:"IDI-0280",nombre:"Inglés Elemental",prereq:[]},
+    {codigo:"INF-5100",nombre:"Intro a la Programación",prereq:["INF-2060"]},
+    {codigo:"INF-5110",nombre:"Lab Intro Programación",prereq:["INF-5100"]},
+    {codigo:"LET-0120",nombre:"Lengua Española II",prereq:["LET-0110"]},
+    {codigo:"MAT-0140",nombre:"Matemática Básica",prereq:[]}
+  ]},
+  { semestre: "3ro", materias: [
+    {codigo:"FIL-0110",nombre:"Filosofía",prereq:[]},
+    {codigo:"FIS-0140",nombre:"Física Básica",prereq:[]},
+    {codigo:"IDI-0130",nombre:"Inglés Técnico",prereq:["IDI-0280"]},
+    {codigo:"INF-5120",nombre:"Lenguaje Prog. I",prereq:["INF-5100","INF-5110"]},
+    {codigo:"INF-5130",nombre:"Lab Lenguaje Prog. I",prereq:["INF-5120"]},
+    {codigo:"MAT-2330",nombre:"Análisis Lineal y Matricial",prereq:["MAT-0140"]},
+    {codigo:"QUI-0140",nombre:"Química Básica",prereq:[]}
+  ]},
+  { semestre: "4to", materias: [
+    {codigo:"FIS-1150",nombre:"Física para Informática",prereq:["FIS-0140"]},
+    {codigo:"FIS-1160",nombre:"Lab Física Informática",prereq:["FIS-0140","FIS-1150"]},
+    {codigo:"INF-5140",nombre:"Lenguaje Prog. II",prereq:["INF-5120","INF-5130"]},
+    {codigo:"INF-5150",nombre:"Lab Lenguaje Prog. II",prereq:["INF-5140"]},
+    {codigo:"INF-5260",nombre:"Estructura de Datos",prereq:["INF-5120"]},
+    {codigo:"MAT-3560",nombre:"Cálculo I",prereq:["MAT-2330"]}
+  ]},
+  { semestre: "5to", materias: [
+    {codigo:"EST-2110",nombre:"Estadística Básica",prereq:["MAT-0140"]},
+    {codigo:"INF-2080",nombre:"Org y Arq del Computador",prereq:["INF-2060"]},
+    {codigo:"INF-5160",nombre:"Lenguaje Prog. III",prereq:["INF-5140","INF-5150"]},
+    {codigo:"INF-5170",nombre:"Lab Lenguaje Prog. III",prereq:["INF-5160"]},
+    {codigo:"MAT-3570",nombre:"Cálculo II",prereq:["MAT-3560"]}
+  ]},
+  { semestre: "6to", materias: [
+    {codigo:"CON-1190",nombre:"Contabilidad I",prereq:["MAT-0140"]},
+    {codigo:"INF-3220",nombre:"Algoritmos Computacionales",prereq:["INF-5120","MAT-3570"]},
+    {codigo:"INF-3240",nombre:"Sistemas Operativos",prereq:["INF-2080"]},
+    {codigo:"INF-4200",nombre:"Base de Datos I",prereq:["INF-5140"]}
+  ]},
+  { semestre: "7mo", materias: [
+    {codigo:"OPT-7000",nombre:"Asignatura Optativa",prereq:[]} ,
+    {codigo:"BIO-2400",nombre:"Bioética",prereq:["FIL-0110","BIO-0140","QUI-0140"]},
+    {codigo:"INF-3290",nombre:"Análisis y Diseño de Sistemas",prereq:["INF-4200"]},
+    {codigo:"INF-5200",nombre:"Base de Datos II",prereq:["INF-4200"]},
+    {codigo:"MAT-1430",nombre:"Matemática Financiera",prereq:["MAT-0140"]},
+    {codigo:"MAT-3920",nombre:"Matemática Discreta",prereq:["MAT-0140"]}
+  ]},
+  { semestre: "8vo", materias: [
+    {codigo:"OPT-8000",nombre:"Asignatura Optativa",prereq:[]} ,
+    {codigo:"INF-4250",nombre:"Teleproceso",prereq:["INF-3240"]},
+    {codigo:"INF-4260",nombre:"Redes de Datos",prereq:["INF-3240","INF-3220"]},
+    {codigo:"INF-5220",nombre:"Ing. Software I",prereq:["INF-3240","INF-5200"]},
+    {codigo:"MAT-3940",nombre:"Inv. de Operaciones",prereq:["MAT-3570"]}
+  ]},
+  { semestre: "9no", materias: [
+    {codigo:"OPT-9000",nombre:"Asignatura Optativa",prereq:[]} ,
+    {codigo:"INF-5230",nombre:"Auditoría de Sistemas",prereq:["INF-3240","INF-3290","INF-4260"]},
+    {codigo:"INF-5240",nombre:"Adm de Centros de Cómputo",prereq:["INF-3240","INF-4260"]},
+    {codigo:"INF-5250",nombre:"Ing. Software II",prereq:["INF-5220"]}
+  ]},
+  { semestre: "Tesis", materias: [
+    {codigo:"INF-7010",nombre:"Tesis de Grado",prereq:[]}
+  ]}
+];
 
-  // Estado guardado de materias activas
-  let estadoMaterias = JSON.parse(localStorage.getItem("estadoMaterias")) || {};
+let estadoMaterias = JSON.parse(localStorage.getItem("estadoMaterias")) || {};
 
-  // Función que verifica si todos los prerrequisitos están activos
-  function puedeActivar(codigo) {
-    const materia = pensum.flatMap(s => s.materias).find(m => m.codigo === codigo);
-    if (!materia) return false;
-    if (materia.prereq.length === 0) return true;
-    return materia.prereq.every(pre => estadoMaterias[pre]);
-  }
+function puedeActivar(codigo) {
+  const materia = pensum.flatMap(s => s.materias).find(m => m.codigo === codigo);
+  if (!materia) return false;
+  if (materia.prereq.length === 0) return true;
+  return materia.prereq.every(pre => estadoMaterias[pre]);
+}
 
-  // Renderiza el pensum y aplica bloqueo
-  function renderPensum() {
-    const pensumDiv = document.getElementById("pensum");
-    pensumDiv.innerHTML = "";
-    pensum.forEach((sem) => {
-      const semestreDiv = document.createElement("div");
-      semestreDiv.classList.add("semestre");
+function renderPensum() {
+  const pensumDiv = document.getElementById("pensum");
+  pensumDiv.innerHTML = "";
+  pensum.forEach(sem => {
+    const semestreDiv = document.createElement("div");
+    semestreDiv.classList.add("semestre");
 
-      const titulo = document.createElement("h2");
-      titulo.textContent = sem.semestre;
-      semestreDiv.appendChild(titulo);
+    const titulo = document.createElement("h2");
+    titulo.textContent = sem.semestre;
+    semestreDiv.appendChild(titulo);
 
-      sem.materias.forEach(mat => {
-        const matDiv = document.createElement("div");
-        matDiv.classList.add("materia");
-        matDiv.textContent = mat.nombre;
-        matDiv.dataset.codigo = mat.codigo;
+    sem.materias.forEach(mat => {
+      const matDiv = document.createElement("div");
+      matDiv.classList.add("materia");
+      matDiv.textContent = mat.nombre;
+      matDiv.dataset.codigo = mat.codigo;
 
-        // Activa si ya está marcado
-        if (estadoMaterias[mat.codigo]) {
-          matDiv.classList.add("activa");
-        }
-
-        // Bloquea si prerrequisitos no cumplidos y no está activa
-        if (!puedeActivar(mat.codigo) && !estadoMaterias[mat.codigo]) {
-          matDiv.classList.add("bloqueada");
-        }
-
-        semestreDiv.appendChild(matDiv);
-      });
-
-      pensumDiv.appendChild(semestreDiv);
-    });
-  }
-
-  // Al hacer clic en una materia
-  document.getElementById("pensum").addEventListener("click", e => {
-    if (!e.target.classList.contains("materia")) return;
-    if (e.target.classList.contains("bloqueada")) return; // No hace nada si está bloqueada
-
-    const codigo = e.target.dataset.codigo;
-
-    if (estadoMaterias[codigo]) {
-      // Desactivar materia y sus dependientes (también las que dependen de esta)
-      eliminarMateriaYDependientes(codigo);
-    } else {
-      // Solo activar si puede
-      if (puedeActivar(codigo)) {
-        estadoMaterias[codigo] = true;
+      if (estadoMaterias[mat.codigo]) matDiv.classList.add("activa");
+      if (!puedeActivar(mat.codigo) && !estadoMaterias[mat.codigo]) {
+        matDiv.classList.add("bloqueada");
       }
-    }
 
-    localStorage.setItem("estadoMaterias", JSON.stringify(estadoMaterias));
-    renderPensum();
+      semestreDiv.appendChild(matDiv);
+    });
+
+    pensumDiv.appendChild(semestreDiv);
   });
+}
 
-  // Eliminar materia y todas las que dependen directa o indirectamente de ella
-  function eliminarMateriaYDependientes(codigo) {
-    // Eliminar la materia
-    delete estadoMaterias[codigo];
+document.getElementById("pensum").addEventListener("click", e => {
+  if (!e.target.classList.contains("materia")) return;
+  if (e.target.classList.contains("bloqueada")) return;
 
-    // Buscar materias que tengan este código como prereq y eliminarlas recursivamente
-    const dependientes = pensum.flatMap(s => s.materias)
-      .filter(m => m.prereq.includes(codigo))
-      .map(m => m.codigo);
+  const codigo = e.target.dataset.codigo;
 
-    dependientes.forEach(dep => {
-      if (estadoMaterias[dep]) {
-        eliminarMateriaYDependientes(dep);
-      }
-    });
+  if (estadoMaterias[codigo]) {
+    eliminarMateriaYDependientes(codigo);
+  } else {
+    if (puedeActivar(codigo)) {
+      estadoMaterias[codigo] = true;
+    }
   }
 
-  // Iniciar
+  localStorage.setItem("estadoMaterias", JSON.stringify(estadoMaterias));
   renderPensum();
-</script>
+});
 
+function eliminarMateriaYDependientes(codigo) {
+  delete estadoMaterias[codigo];
+  const dependientes = pensum.flatMap(s => s.materias)
+    .filter(m => m.prereq.includes(codigo))
+    .map(m => m.codigo);
+  dependientes.forEach(dep => {
+    if (estadoMaterias[dep]) {
+      eliminarMateriaYDependientes(dep);
+    }
+  });
+}
+
+renderPensum();
+</script>
 </body>
 </html>
