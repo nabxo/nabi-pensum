@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pensum Interactivo Completo</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #fff9f9;
+    margin: 0;
+    padding: 1rem;
+    overflow-x: hidden;
+  }
+  h1 {
+    text-align: center;
+    color: #7b1fa2;
+    margin-bottom: 1rem;
+    font-family: Georgia, serif;
+  }
+
+  #pensum {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+
+  .semestre {
+    min-width: 240px;
+    background: #f7e6f7;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 0 8px #c48ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .semestre h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #9c27b0;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .materia {
+    width: 200px;
+    background: #fff;
+    border-radius: 8px;
+    border: 2px solid #ce93d8;
+    margin-bottom: 0.7rem;
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s;
+    font-weight: 600;
+    color: #4a148c;
+  }
+  .materia:hover:not(.bloqueada) {
+    background-color: #e1bee7;
+  }
+  .materia.activa {
+    background-color: #9c27b0;
+    color: white;
+    border-color: #6a0080;
+  }
+  .materia.bloqueada {
+    background-color: #ddd;
+    color: #999;
+    border-color: #bbb;
+    cursor: not-allowed;
+  }
+  .materia.bloqueada:hover {
+    background-color: #ddd;
+  }
+
+  #pensum::-webkit-scrollbar {
+    height: 10px;
+  }
+  #pensum::-webkit-scrollbar-thumb {
+    background-color: #9c27b0;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Pensum Interactivo Completo</h1>
+
+<div id="pensum"></div>
+
+<script>
+  const pensum = [
+    {
+      semestre: "1er Semestre",
+      materias: [
+        {codigo: "BIO-0140", nombre: "Biología Básica", prereq: []},
+        {codigo: "DOP-1000", nombre: "Orientación Institucional", prereq: []},
+        {codigo: "HIS-0110", nombre: "Fundamentos de Historia Social Dominicana", prereq: []},
+        {codigo: "INF-2060", nombre: "Computación Esencial", prereq: []},
+        {codigo: "INF-2070", nombre: "Laboratorio de Computación Esencial", prereq: ["INF-2060"]},
+        {codigo: "LET-0110", nombre: "Lengua Española Básica I", prereq: []},
+        {codigo: "SOC-0100", nombre: "Introducción a las Ciencias Sociales", prereq: []},
+      ]
+    },
+    {
+      semestre: "2do Semestre",
+      materias: [
+        {codigo: "EFS-0120", nombre: "Educación Física", prereq: []},
+        {codigo: "IDI-0280", nombre: "Inglés Elemental", prereq: []},
+        {codigo: "INF-5100", nombre: "Introducción a la Programación", prereq: ["INF-2060"]},
+        {codigo: "IN
